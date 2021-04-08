@@ -17,7 +17,7 @@ const MaterialUIPicker = (props: IDateInputProps) => {
     if (selectedDate) {
       props.onDateChange(selectedDate);
     }
-  });
+  }, []);
 
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
