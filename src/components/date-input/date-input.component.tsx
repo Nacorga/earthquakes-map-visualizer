@@ -1,5 +1,4 @@
 import 'date-fns';
-import { useState, useEffect } from 'react';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 
@@ -11,30 +10,25 @@ interface IDateInputProps {
 }
 
 const MaterialUIPicker = (props: IDateInputProps) => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(props.value);
-
-  useEffect(() => {
-    if (selectedDate) {
-      props.onDateChange(selectedDate);
-    }
-  }, []);
 
   const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date);
+    if (date) {
+      props.onDateChange(date);
+    }
   };
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <KeyboardDatePicker
-          id={props.id}
-          label={props.label}
-          format="MM/dd/yyyy"
-          value={selectedDate}
-          onChange={handleDateChange}
-          KeyboardButtonProps={{
-            'aria-label': 'change date',
-          }}
-        />
+      <KeyboardDatePicker
+        id={props.id}
+        label={props.label}
+        format="MM/dd/yyyy"
+        value={props.value}
+        onChange={handleDateChange}
+        KeyboardButtonProps={{
+          'aria-label': 'change date',
+        }}
+      />
     </MuiPickersUtilsProvider>
   );
 }

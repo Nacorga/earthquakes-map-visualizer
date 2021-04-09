@@ -1,6 +1,10 @@
 @import './theme/theme.scss';
 
 .app {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+
   &__header {
     background-color: #f8f9fa;
 
@@ -25,6 +29,12 @@
         }
       }
     }
+  }
+
+  &__views {
+    height: 100%;
+    display: grid;
+    grid-template-rows: 1fr auto;
   }
 }
 
