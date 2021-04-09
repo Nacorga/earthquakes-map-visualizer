@@ -6,6 +6,8 @@ import { useState, useEffect } from 'react';
 import { filterEarthquakes } from './services/eathquake/earthquake.service';
 import { ISelectedDates } from './interfaces/selected-dates.interface';
 import { IMapPoint } from './interfaces/map-point.interface';
+import { getState } from './services/state/state.service';
+import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 
 const APP_TITLE = 'Earthquakes Map Visualizer';
 
@@ -13,6 +15,14 @@ const App = () => {
 
   const [selectedDates, setSelectedDates] = useState<ISelectedDates>({starttime: new Date(), endtime: null});
   const [earthquakes, setEarthquakes] = useState<IMapPoint[] | null>(null);
+
+  getState().pipe(
+    filter((data) => !!data),
+    debounceTime(250),
+    distinctUntilChanged()
+  ).subscribe((data) => {
+    console.log(data);
+  });
 
   useEffect(() => {
     loadFilteredEarthquakes();
