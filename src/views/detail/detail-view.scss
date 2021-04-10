@@ -2,24 +2,33 @@
 
 .detail-view {
   padding: $size-sm;
-  max-height: 320px;
+  max-height: 220px;
   overflow-y: auto;
 
+  .spinner-container {
+    display: flex;
+    align-items: center;
+  }
+
   &__row {
-    &:not(.header) {
-      display: flex;
-      align-items: center;
+    &.header {
+      margin-bottom: $size-sm;;
     }
 
-    & + & {
-      margin-top: $size-xs;
-    }
+    &.details {
+      display: grid;
+      grid-template-rows: repeat(5, auto);
+      row-gap: $size-xs;
 
-    &-col {
-      display: flex;
-      align-items: center;
-      & + & {
-        margin-left: $size-sm;
+      @media (min-width: $tablet) {
+        grid-template-rows: auto;
+        row-gap: 0;
+        grid-template-columns: repeat(5, max-content);
+        column-gap: $size-sm;
+      }
+
+      @media (min-width: $desktop) {
+        column-gap: $size-md;
       }
     }
   }

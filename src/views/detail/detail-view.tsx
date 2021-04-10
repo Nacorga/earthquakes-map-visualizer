@@ -12,7 +12,7 @@ const DetailView = ({
 }) => (
   <div className="detail-view">
     {loading ? (
-      <div className="detail-view__row">
+      <div className="spinner-container">
         <CircularProgress></CircularProgress>
         <span className="ml-2">Loading details...</span>
       </div>
@@ -24,7 +24,7 @@ const DetailView = ({
               <h2 className="title">{earthquakeDetails.id}</h2>
               <h3 className="subtitle">{earthquakeDetails.title}</h3>
             </div>
-            <div className="detail-view__row">
+            <div className="detail-view__row details">
               <div className="detail-view__row-col">
                 <span>
                   <b>Location</b>: {earthquakeDetails.location}
