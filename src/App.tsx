@@ -14,34 +14,35 @@ import { setEarthquake } from './redux/actions';
 
 const APP_TITLE = 'Earthquakes Map Visualizer';
 
-const App = ({isLoading, detail}: IEarthquakeState) => {
-
-  const [selectedDates, setSelectedDates] = useState<ISelectedDates>({starttime: new Date(), endtime: null});
+const App = ({ isLoading, detail }: IEarthquakeState) => {
+  const [selectedDates, setSelectedDates] = useState<ISelectedDates>({ starttime: new Date(), endtime: null });
   const [earthquakes, setEarthquakes] = useState<IMapPoint[] | null>(null);
 
   useEffect(() => {
     loadFilteredEarthquakes();
   }, [selectedDates]);
 
-  const loadFilteredEarthquakes = async() => {
+  const loadFilteredEarthquakes = async () => {
     setEarthquakes(null);
     const res = await filterEarthquakes(selectedDates);
-    setEarthquakes(res.features
-      .filter((elem: any) => elem.geometry.type === 'Point')
-      .map((elem: any) => ({
-        id: elem.id,
-        place: elem.properties.place,
-        coords: {
-          lng: elem.geometry.coordinates[0],
-          lat: elem.geometry.coordinates[1],
-        }
-      })));
-  }
+    setEarthquakes(
+      res.features
+        .filter((elem: any) => elem.geometry.type === 'Point')
+        .map((elem: any) => ({
+          id: elem.id,
+          place: elem.properties.place,
+          coords: {
+            lng: elem.geometry.coordinates[0],
+            lat: elem.geometry.coordinates[1],
+          },
+        }))
+    );
+  };
 
   const handleInputChange = (field: 'starttime' | 'endtime', date: Date) => {
     store.dispatch(setEarthquake(null));
-    setSelectedDates({...selectedDates, [field]: date});
-  }
+    setSelectedDates({ ...selectedDates, [field]: date });
+  };
 
   return (
     <div className="app">
@@ -70,15 +71,19 @@ const App = ({isLoading, detail}: IEarthquakeState) => {
       </header>
       <section className="app__views">
         <div className="app__views-elem map">
-          <MapView points={earthquakes}/>
+          <MapView points={earthquakes} />
         </div>
         <div className="app__views-elem detail">
-          {isLoading || detail  ? <DetailView loading={isLoading} earthquakeDetails={detail ? mapEartquake(detail) : null}/> : <></>}
+          {isLoading || detail ? (
+            <DetailView loading={isLoading} earthquakeDetails={detail ? mapEartquake(detail) : null} />
+          ) : (
+            <></>
+          )}
         </div>
       </section>
     </div>
   );
-}
+};
 
 const mapEartquake = (earthquake: IEarthquake): IEarthquakeMapTo => ({
   id: earthquake.id,
@@ -87,7 +92,7 @@ const mapEartquake = (earthquake: IEarthquake): IEarthquakeMapTo => ({
   date: earthquake.properties.updated,
   type: earthquake.properties.type,
   magnitude: earthquake.properties.mag,
-  state: earthquake.properties.status
+  state: earthquake.properties.status,
 });
 
 const mapStateToProps = (state: IState): IEarthquakeState => {

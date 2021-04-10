@@ -1,38 +1,37 @@
 @import '../../theme/theme.scss';
 
 .detail-view {
-    padding: $size-sm;
-    max-height: 320px;
-    overflow-y: auto;
+  padding: $size-sm;
+  max-height: 320px;
+  overflow-y: auto;
 
-    &__row {
-        
-        &:not(.header) {
-            display: flex;
-            align-items: center;
-        }
-
-        & + & {
-            margin-top: $size-xs;
-        }
-
-        &-col {
-            display: flex;
-            align-items: center;
-            & + & {
-                margin-left: $size-sm;
-            }
-        }
+  &__row {
+    &:not(.header) {
+      display: flex;
+      align-items: center;
     }
+
+    & + & {
+      margin-top: $size-xs;
+    }
+
+    &-col {
+      display: flex;
+      align-items: center;
+      & + & {
+        margin-left: $size-sm;
+      }
+    }
+  }
 }
 
 .title {
-    font-size: $size-md;
-    margin-bottom: $size-xs;
+  font-size: $size-md;
+  margin-bottom: $size-xs;
 }
 
 .subtitle {
-    margin-bottom: 0;
-    font-size: 18px;
-    font-weight: 500;
+  margin-bottom: 0;
+  font-size: 18px;
+  font-weight: 500;
 }

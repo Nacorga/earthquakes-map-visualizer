@@ -10,7 +10,6 @@ interface IDateInputProps {
 }
 
 const MaterialUIPicker = (props: IDateInputProps) => {
-
   const handleDateChange = (date: Date | null) => {
     if (date) {
       props.onDateChange(date);
@@ -31,6 +30,6 @@ const MaterialUIPicker = (props: IDateInputProps) => {
       />
     </MuiPickersUtilsProvider>
   );
-}
+};
 
 export default MaterialUIPicker;
