@@ -6,23 +6,16 @@ import { useState, useEffect } from 'react';
 import { filterEarthquakes } from './services/eathquake/earthquake.service';
 import { ISelectedDates } from './interfaces/selected-dates.interface';
 import { IMapPoint } from './interfaces/map-point.interface';
-import { getState } from './services/state/state.service';
-import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
+import { connect } from 'react-redux';
+import { IEarthquake, IEarthquakeMapTo } from './interfaces/earthquake.interface';
+import { IState, IEarthquakeState } from './interfaces/state.interface';
 
 const APP_TITLE = 'Earthquakes Map Visualizer';
 
-const App = () => {
+const App = ({isLoading, detail}: IEarthquakeState) => {
 
   const [selectedDates, setSelectedDates] = useState<ISelectedDates>({starttime: new Date(), endtime: null});
   const [earthquakes, setEarthquakes] = useState<IMapPoint[] | null>(null);
-
-  getState().pipe(
-    filter((data) => !!data),
-    debounceTime(250),
-    distinctUntilChanged()
-  ).subscribe((data) => {
-    console.log(data);
-  });
 
   useEffect(() => {
     loadFilteredEarthquakes();
@@ -77,11 +70,25 @@ const App = () => {
           <MapView points={earthquakes}/>
         </div>
         <div className="app__views-elem detail">
-          <DetailView />
+          {detail ? <DetailView loading={isLoading} earthquakeDetails={mapEartquake(detail)}/> : <></>}
         </div>
       </section>
     </div>
   );
 }
 
-export default App;
+const mapEartquake = (earthquake: IEarthquake): IEarthquakeMapTo => ({
+  id: earthquake.id,
+  location: earthquake.properties.place,
+  title: earthquake.properties.title,
+  date: earthquake.properties.updated,
+  type: earthquake.properties.type,
+  magnitude: earthquake.properties.mag,
+  state: earthquake.properties.status
+});
+
+const mapStateToProps = (state: IState): IEarthquakeState => {
+  return state.earthquake;
+};
+
+export default connect(mapStateToProps)(App);

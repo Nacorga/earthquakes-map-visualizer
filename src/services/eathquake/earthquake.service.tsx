@@ -5,7 +5,7 @@ const BASE_API_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=ge
 export const filterEarthquakes = async (selectedDates: ISelectedDates): Promise<any> => {
 
   const datesQueryParams = selectedDatesMapper(selectedDates);
-  let url = `${BASE_API_URL}&limit=250&starttime=${datesQueryParams.starttime}`;
+  let url = `${BASE_API_URL}&starttime=${datesQueryParams.starttime}`;
 
   if (datesQueryParams.endtime) {
     url = url.concat(`&endtime=${datesQueryParams.endtime}`);

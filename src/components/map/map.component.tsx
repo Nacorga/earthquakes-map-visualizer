@@ -4,7 +4,8 @@ import MarkerClusterer from "react-google-maps/lib/components/addons/MarkerClust
 import InfoWindow from 'react-google-maps/lib/components/InfoWindow';
 import { IMapPoint } from "../../interfaces/map-point.interface";
 import { findEarthquake } from '../../services/eathquake/earthquake.service';
-import { setState } from '../../services/state/state.service';
+import store from '../../redux/store';
+import { loaderToggle, setEarthquake } from '../../redux/actions';
 
 const MapComponent = withScriptjs(withGoogleMap((props: any) => {
 
@@ -36,14 +37,17 @@ const MapComponent = withScriptjs(withGoogleMap((props: any) => {
   };
 
   const getEarthquakeDetails = async (id: string) => {
-    const earthquakeDetail = await findEarthquake(id);
-    setState(earthquakeDetail);
+    store.dispatch(loaderToggle(true));
+    const earthquake = await findEarthquake(id);
+    store.dispatch(setEarthquake(earthquake));
+    store.dispatch(loaderToggle(false));
   }
 
   const gmMap = () => {
     return (
       <GoogleMap
-        ref={(ref) => { setMap(ref as GoogleMap); }}>
+        ref={(ref) => { setMap(ref as GoogleMap); }}
+        options={{streetViewControl: false, mapTypeControl: false, fullscreenControl: false}}>
         <MarkerClusterer
           onClick={props.onMarkerClustererClick}
           averageCenter
@@ -56,10 +60,16 @@ const MapComponent = withScriptjs(withGoogleMap((props: any) => {
               onClick={() => openToggle(marker.id)}>
                 {openInfoWindowMarkerId === marker.id && <InfoWindow
                   onCloseClick={() => setOpenInfoWindowMarkerId(null)}>
-                  <div style={{ padding: `16px` }}>
-                    <h4 style={{ fontSize: '24px' }}>{marker.id}</h4>
-                    <p style={{ fontSize: '18px' }}>{marker.place}</p>
-                    <button onClick={() => getEarthquakeDetails(marker.id)}>Show details</button>
+                  <div style={{ padding: `8px` }}>
+                    <h4 style={{ fontSize: '20px' }}>{marker.id}</h4>
+                    <p style={{ fontSize: '16px' }}>{marker.place}</p>
+                    <button style={{
+                      color: '#fff',
+                      backgroundColor: '#3a86ff',
+                      fontSize: '16px',
+                      padding: '4px 12px',
+                      border: 'none'
+                    }} onClick={() => getEarthquakeDetails(marker.id)}>Show details</button>
                   </div>
                 </InfoWindow>}
             </Marker>
@@ -72,7 +82,5 @@ const MapComponent = withScriptjs(withGoogleMap((props: any) => {
   return <div className="map-container">{gmMap()}</div>;
 
 }));
-
-
 
 export default MapComponent;

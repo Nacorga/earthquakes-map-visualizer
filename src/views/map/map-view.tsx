@@ -8,7 +8,6 @@ const MapView = (props: {points: IMapPoint[] | null}) => {
   return (
     <div className="map-view">
       {
-        // props.points ? <MapComponent points={props.points as IMapPoint[]}/> : <CircularProgress />
         props.points ? 
         <MapComponent
           googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&libraries=places&language=es`}
