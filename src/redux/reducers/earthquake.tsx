@@ -6,7 +6,7 @@ const initialState: IEarthquakeState = {
   detail: null
 };
 
-export default (state = initialState, action: {type: ACTIONS, data: any}): IEarthquakeState => {
+const earthquakeReduce = (state = initialState, action: {type: ACTIONS, data: any}): IEarthquakeState => {
   switch (action.type) {
     case ACTIONS.LOADER_TOGGLE:
       return Object.assign({}, state, {isLoading: action.data});
@@ -16,3 +16,5 @@ export default (state = initialState, action: {type: ACTIONS, data: any}): IEart
       return state;
   }
 };
+
+export default earthquakeReduce;

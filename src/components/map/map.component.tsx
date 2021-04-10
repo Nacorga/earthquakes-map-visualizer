@@ -28,7 +28,7 @@ const MapComponent = withScriptjs(withGoogleMap((props: any) => {
     return new google.maps.LatLng(elem.coords.lat, elem.coords.lng);
   }
     
-  useEffect(startMap, [map]);
+  useEffect(startMap, [map, points]);
 
   const [openInfoWindowMarkerId, setOpenInfoWindowMarkerId] = useState<string | null>(null);
 
@@ -42,6 +42,11 @@ const MapComponent = withScriptjs(withGoogleMap((props: any) => {
     store.dispatch(setEarthquake(earthquake));
     store.dispatch(loaderToggle(false));
   }
+
+  const onInfowindowClose = () => {
+    setOpenInfoWindowMarkerId(null);
+    store.dispatch(setEarthquake(null));
+  };
 
   const gmMap = () => {
     return (
@@ -59,7 +64,7 @@ const MapComponent = withScriptjs(withGoogleMap((props: any) => {
               position={{ lat: marker.coords.lat, lng: marker.coords.lng }}
               onClick={() => openToggle(marker.id)}>
                 {openInfoWindowMarkerId === marker.id && <InfoWindow
-                  onCloseClick={() => setOpenInfoWindowMarkerId(null)}>
+                  onCloseClick={() => onInfowindowClose()}>
                   <div style={{ padding: `8px` }}>
                     <h4 style={{ fontSize: '20px' }}>{marker.id}</h4>
                     <p style={{ fontSize: '16px' }}>{marker.place}</p>

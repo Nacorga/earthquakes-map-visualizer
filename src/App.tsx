@@ -9,6 +9,8 @@ import { IMapPoint } from './interfaces/map-point.interface';
 import { connect } from 'react-redux';
 import { IEarthquake, IEarthquakeMapTo } from './interfaces/earthquake.interface';
 import { IState, IEarthquakeState } from './interfaces/state.interface';
+import store from './redux/store';
+import { setEarthquake } from './redux/actions';
 
 const APP_TITLE = 'Earthquakes Map Visualizer';
 
@@ -37,6 +39,7 @@ const App = ({isLoading, detail}: IEarthquakeState) => {
   }
 
   const handleInputChange = (field: 'starttime' | 'endtime', date: Date) => {
+    store.dispatch(setEarthquake(null));
     setSelectedDates({...selectedDates, [field]: date});
   }
 
