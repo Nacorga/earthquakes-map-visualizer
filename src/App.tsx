@@ -70,7 +70,7 @@ const App = ({isLoading, detail}: IEarthquakeState) => {
           <MapView points={earthquakes}/>
         </div>
         <div className="app__views-elem detail">
-          {detail ? <DetailView loading={isLoading} earthquakeDetails={mapEartquake(detail)}/> : <></>}
+          {isLoading || detail  ? <DetailView loading={isLoading} earthquakeDetails={detail ? mapEartquake(detail) : null}/> : <></>}
         </div>
       </section>
     </div>

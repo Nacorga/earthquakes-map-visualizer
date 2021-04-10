@@ -15,7 +15,9 @@ const MapView = (props: {points: IMapPoint[] | null}) => {
           containerElement={<div style={{ height: `100%` }} />}
           mapElement={<div style={{ height: `100%` }} />}
           points={props.points as IMapPoint[]}/> :
-        <CircularProgress />
+        <div className="spinner-wrapper">
+          <CircularProgress size={120}/>
+        </div>
       }
     </div>
   );
