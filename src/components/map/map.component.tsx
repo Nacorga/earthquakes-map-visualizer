@@ -6,21 +6,57 @@ import { IMapPoint } from '../../interfaces/map-point.interface';
 import { findEarthquake } from '../../services/eathquake/earthquake.service';
 import store from '../../redux/store';
 import { loaderToggle, setEarthquake } from '../../redux/actions';
+import { IEarthquake } from '../../interfaces/earthquake.interface';
+
+interface IQueryPoint {
+  id: string;
+  coords: {
+    lat: number;
+    lng: number;
+  };
+}
+
+interface IGmConfig {
+  zoom: number;
+  center: google.maps.LatLng;
+}
 
 const MapComponent = withScriptjs(
   withGoogleMap((props: any) => {
     const points: IMapPoint[] = props.points;
 
-    const [map, setMap] = useState<GoogleMap | null>(null);
+    const [map, setMap] = useState<GoogleMap>();
+    const [openInfoWindowMarkerId, setOpenInfoWindowMarkerId] = useState<string | null>(null);
+    const [queryPoint, setQueryPoint] = useState<IQueryPoint>();
+    const [gmDefaultConfig, setGmDefaultConfig] = useState<IGmConfig>();
+
+    useEffect(() => {
+      if (store.getState().earthquake.detail) {
+        const earthquake = store.getState().earthquake.detail as IEarthquake;
+        const lng = earthquake.geometry.coordinates[0];
+        const lat = earthquake.geometry.coordinates[1];
+        setQueryPoint({
+          id: earthquake.id,
+          coords: { lat, lng },
+        });
+      }
+    }, []);
 
     const startMap = (): void => {
       if (map) {
-        const gmPoints = points.map((elem) => getLatLngPoint(elem));
-        const bounds = new google.maps.LatLngBounds();
-        gmPoints.forEach((elem) => {
-          bounds.extend(elem);
-        });
-        map.fitBounds(bounds);
+        if (queryPoint) {
+          setGmDefaultConfig({
+            zoom: 8,
+            center: new google.maps.LatLng(queryPoint.coords.lat, queryPoint.coords.lng),
+          });
+        } else if (points && points.length > 0) {
+          const gmPoints = points.map((elem) => getLatLngPoint(elem));
+          const bounds = new google.maps.LatLngBounds();
+          gmPoints.forEach((elem) => {
+            bounds.extend(elem);
+          });
+          map.fitBounds(bounds);
+        }
       }
     };
 
@@ -29,8 +65,6 @@ const MapComponent = withScriptjs(
     };
 
     useEffect(startMap, [map, points]);
-
-    const [openInfoWindowMarkerId, setOpenInfoWindowMarkerId] = useState<string | null>(null);
 
     const openToggle = (id: string) => {
       setOpenInfoWindowMarkerId(openInfoWindowMarkerId && openInfoWindowMarkerId === id ? null : id);
@@ -48,9 +82,11 @@ const MapComponent = withScriptjs(
       store.dispatch(setEarthquake(null));
     };
 
-    const gmMap = () => {
-      return (
+    return (
+      <div className="map-container">
         <GoogleMap
+          zoom={gmDefaultConfig?.zoom}
+          center={gmDefaultConfig?.center}
           ref={(ref) => {
             setMap(ref as GoogleMap);
           }}
@@ -87,10 +123,8 @@ const MapComponent = withScriptjs(
             ))}
           </MarkerClusterer>
         </GoogleMap>
-      );
-    };
-
-    return <div className="map-container">{gmMap()}</div>;
+      </div>
+    );
   })
 );
 
