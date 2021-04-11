@@ -3,14 +3,15 @@ import MaterialUIPicker from './components/date-input/date-input.component';
 import DetailView from './views/detail/detail-view';
 import MapView from './views/map/map-view';
 import { useState, useEffect } from 'react';
-import { filterEarthquakes } from './services/eathquake/earthquake.service';
+import { filterEarthquakes, findEarthquake } from './services/eathquake/earthquake.service';
 import { ISelectedDates } from './interfaces/selected-dates.interface';
 import { IMapPoint } from './interfaces/map-point.interface';
 import { connect } from 'react-redux';
 import { IEarthquake, IEarthquakeMapTo } from './interfaces/earthquake.interface';
 import { IState, IEarthquakeState } from './interfaces/state.interface';
 import store from './redux/store';
-import { setEarthquake } from './redux/actions';
+import { loaderToggle, setEarthquake } from './redux/actions';
+import { useHistory } from 'react-router-dom';
 
 const APP_TITLE = 'Earthquakes Map Visualizer';
 
@@ -18,9 +19,28 @@ const App = ({ isLoading, detail }: IEarthquakeState) => {
   const [selectedDates, setSelectedDates] = useState<ISelectedDates>({ starttime: new Date(), endtime: null });
   const [earthquakes, setEarthquakes] = useState<IMapPoint[] | null>(null);
 
+  const history = useHistory();
+
+  const checkQuryParams = async () => {
+    const params = new URLSearchParams(history.location.search);
+    const earthquakeId = params.get('id');
+    if (earthquakeId) {
+      store.dispatch(loaderToggle(true));
+      const earthquake = await findEarthquake(earthquakeId);
+      store.dispatch(setEarthquake(earthquake));
+      store.dispatch(loaderToggle(false));
+    }
+  };
+
   useEffect(() => {
-    loadFilteredEarthquakes();
-  }, [selectedDates]);
+    checkQuryParams();
+  }, []);
+
+  useEffect(() => {
+    if (detail) {
+      history.push(`?id=${detail.id}`);
+    }
+  }, [detail]);
 
   const loadFilteredEarthquakes = async () => {
     setEarthquakes(null);
@@ -38,6 +58,10 @@ const App = ({ isLoading, detail }: IEarthquakeState) => {
         }))
     );
   };
+
+  useEffect(() => {
+    loadFilteredEarthquakes();
+  }, [selectedDates]);
 
   const handleInputChange = (field: 'starttime' | 'endtime', date: Date) => {
     store.dispatch(setEarthquake(null));
