@@ -1,9 +1,9 @@
 export interface ISelectedDates {
-  starttime: Date;
+  starttime: Date | null;
   endtime: Date | null;
 }
 
 export interface ISelectedDatesMapTo {
-  starttime: string;
+  starttime: string | null;
   endtime?: string | null;
 }

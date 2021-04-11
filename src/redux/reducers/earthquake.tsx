@@ -6,9 +6,9 @@ const initialState: IEarthquakeState = {
   detail: null,
 };
 
-const earthquakeReduce = (state = initialState, action: { type: ACTIONS; data: any }): IEarthquakeState => {
+const earthquakeReducer = (state = initialState, action: { type: ACTIONS; data: any }): IEarthquakeState => {
   switch (action.type) {
-    case ACTIONS.LOADER_TOGGLE:
+    case ACTIONS.EARTHQUAKE_LOADER_TOGGLE:
       return Object.assign({}, state, { isLoading: action.data });
     case ACTIONS.SET_EARTHQUAKE:
       return Object.assign({}, state, { detail: action.data });
@@ -17,4 +17,4 @@ const earthquakeReduce = (state = initialState, action: { type: ACTIONS; data: a
   }
 };
 
-export default earthquakeReduce;
+export default earthquakeReducer;

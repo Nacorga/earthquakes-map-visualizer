@@ -56,7 +56,10 @@ export const findEarthquake = async (id: string): Promise<any> => {
 };
 
 const selectedDatesMapper = (dates: ISelectedDates): ISelectedDatesMapTo => {
-  return { starttime: dateParser(dates.starttime), endtime: dates.endtime ? dateParser(dates.endtime) : null };
+  return {
+    starttime: dates.starttime ? dateParser(dates.starttime) : null,
+    endtime: dates.endtime ? dateParser(dates.endtime) : null,
+  };
 };
 
 const dateParser = (date: Date): string => `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;

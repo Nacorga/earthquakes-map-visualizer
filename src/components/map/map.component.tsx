@@ -5,16 +5,8 @@ import InfoWindow from 'react-google-maps/lib/components/InfoWindow';
 import { IMapPoint } from '../../interfaces/map-point.interface';
 import { findEarthquake } from '../../services/eathquake/earthquake.service';
 import store from '../../redux/store';
-import { loaderToggle, setEarthquake } from '../../redux/actions';
+import { earthquakeLoaderToggle, setEarthquake } from '../../redux/actions';
 import { IEarthquake } from '../../interfaces/earthquake.interface';
-
-interface IQueryPoint {
-  id: string;
-  coords: {
-    lat: number;
-    lng: number;
-  };
-}
 
 interface IGmConfig {
   zoom: number;
@@ -27,7 +19,7 @@ const MapComponent = withScriptjs(
 
     const [map, setMap] = useState<GoogleMap>();
     const [openInfoWindowMarkerId, setOpenInfoWindowMarkerId] = useState<string | null>(null);
-    const [queryPoint, setQueryPoint] = useState<IQueryPoint>();
+    const [queryPoint, setQueryPoint] = useState<IMapPoint>();
     const [gmDefaultConfig, setGmDefaultConfig] = useState<IGmConfig>();
 
     useEffect(() => {
@@ -37,6 +29,7 @@ const MapComponent = withScriptjs(
         const lat = earthquake.geometry.coordinates[1];
         setQueryPoint({
           id: earthquake.id,
+          place: earthquake.properties.place,
           coords: { lat, lng },
         });
       }
@@ -56,6 +49,11 @@ const MapComponent = withScriptjs(
             bounds.extend(elem);
           });
           map.fitBounds(bounds);
+        } else {
+          setGmDefaultConfig({
+            zoom: 2,
+            center: new google.maps.LatLng(0, 0),
+          });
         }
       }
     };
@@ -71,16 +69,45 @@ const MapComponent = withScriptjs(
     };
 
     const getEarthquakeDetails = async (id: string) => {
-      store.dispatch(loaderToggle(true));
+      store.dispatch(earthquakeLoaderToggle(true));
       const earthquake = await findEarthquake(id);
       store.dispatch(setEarthquake(earthquake));
-      store.dispatch(loaderToggle(false));
+      store.dispatch(earthquakeLoaderToggle(false));
     };
 
     const onInfowindowClose = () => {
       setOpenInfoWindowMarkerId(null);
       store.dispatch(setEarthquake(null));
     };
+
+    const markerEl = (marker: IMapPoint) => (
+      <Marker
+        key={marker.id}
+        position={{ lat: marker.coords.lat, lng: marker.coords.lng }}
+        onClick={() => openToggle(marker.id)}
+      >
+        {openInfoWindowMarkerId === marker.id && (
+          <InfoWindow onCloseClick={() => onInfowindowClose()}>
+            <div style={{ padding: `8px` }}>
+              <h4 style={{ fontSize: '20px' }}>{marker.id}</h4>
+              <p style={{ fontSize: '16px' }}>{marker.place}</p>
+              <button
+                style={{
+                  color: '#fff',
+                  backgroundColor: '#3a86ff',
+                  fontSize: '16px',
+                  padding: '4px 12px',
+                  border: 'none',
+                }}
+                onClick={() => getEarthquakeDetails(marker.id)}
+              >
+                Show details
+              </button>
+            </div>
+          </InfoWindow>
+        )}
+      </Marker>
+    );
 
     return (
       <div className="map-container">
@@ -92,36 +119,17 @@ const MapComponent = withScriptjs(
           }}
           options={{ streetViewControl: false, mapTypeControl: false, fullscreenControl: false }}
         >
-          <MarkerClusterer onClick={props.onMarkerClustererClick} averageCenter enableRetinaIcons gridSize={60}>
-            {points.map((marker: IMapPoint) => (
-              <Marker
-                key={marker.id}
-                position={{ lat: marker.coords.lat, lng: marker.coords.lng }}
-                onClick={() => openToggle(marker.id)}
-              >
-                {openInfoWindowMarkerId === marker.id && (
-                  <InfoWindow onCloseClick={() => onInfowindowClose()}>
-                    <div style={{ padding: `8px` }}>
-                      <h4 style={{ fontSize: '20px' }}>{marker.id}</h4>
-                      <p style={{ fontSize: '16px' }}>{marker.place}</p>
-                      <button
-                        style={{
-                          color: '#fff',
-                          backgroundColor: '#3a86ff',
-                          fontSize: '16px',
-                          padding: '4px 12px',
-                          border: 'none',
-                        }}
-                        onClick={() => getEarthquakeDetails(marker.id)}
-                      >
-                        Show details
-                      </button>
-                    </div>
-                  </InfoWindow>
-                )}
-              </Marker>
-            ))}
-          </MarkerClusterer>
+          {queryPoint || (points && points.length > 0) ? (
+            queryPoint ? (
+              markerEl(queryPoint)
+            ) : (
+              <MarkerClusterer onClick={props.onMarkerClustererClick} averageCenter enableRetinaIcons gridSize={60}>
+                {points.map((marker: IMapPoint) => markerEl(marker))}
+              </MarkerClusterer>
+            )
+          ) : (
+            <></>
+          )}
         </GoogleMap>
       </div>
     );
