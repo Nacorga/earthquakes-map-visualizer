@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/earthquakes-map-visualizer/static/css/main.13323a26.chunk.css",
-    "main.js": "/earthquakes-map-visualizer/static/js/main.0448ebaf.chunk.js",
-    "main.js.map": "/earthquakes-map-visualizer/static/js/main.0448ebaf.chunk.js.map",
-    "runtime-main.js": "/earthquakes-map-visualizer/static/js/runtime-main.6a0d16e9.js",
-    "runtime-main.js.map": "/earthquakes-map-visualizer/static/js/runtime-main.6a0d16e9.js.map",
+    "main.css": "/earthquakes-map-visualizer/static/css/main.1c66e721.chunk.css",
+    "main.js": "/earthquakes-map-visualizer/static/js/main.c1f6e3b2.chunk.js",
+    "main.js.map": "/earthquakes-map-visualizer/static/js/main.c1f6e3b2.chunk.js.map",
+    "runtime-main.js": "/earthquakes-map-visualizer/static/js/runtime-main.643b4ee8.js",
+    "runtime-main.js.map": "/earthquakes-map-visualizer/static/js/runtime-main.643b4ee8.js.map",
     "static/css/2.4c97ca4f.chunk.css": "/earthquakes-map-visualizer/static/css/2.4c97ca4f.chunk.css",
-    "static/js/2.40debefe.chunk.js": "/earthquakes-map-visualizer/static/js/2.40debefe.chunk.js",
-    "static/js/2.40debefe.chunk.js.map": "/earthquakes-map-visualizer/static/js/2.40debefe.chunk.js.map",
-    "static/js/3.0be895f1.chunk.js": "/earthquakes-map-visualizer/static/js/3.0be895f1.chunk.js",
-    "static/js/3.0be895f1.chunk.js.map": "/earthquakes-map-visualizer/static/js/3.0be895f1.chunk.js.map",
+    "static/js/2.3256b4fb.chunk.js": "/earthquakes-map-visualizer/static/js/2.3256b4fb.chunk.js",
+    "static/js/2.3256b4fb.chunk.js.map": "/earthquakes-map-visualizer/static/js/2.3256b4fb.chunk.js.map",
+    "static/js/3.01f0933c.chunk.js": "/earthquakes-map-visualizer/static/js/3.01f0933c.chunk.js",
+    "static/js/3.01f0933c.chunk.js.map": "/earthquakes-map-visualizer/static/js/3.01f0933c.chunk.js.map",
     "index.html": "/earthquakes-map-visualizer/index.html",
     "static/css/2.4c97ca4f.chunk.css.map": "/earthquakes-map-visualizer/static/css/2.4c97ca4f.chunk.css.map",
-    "static/css/main.13323a26.chunk.css.map": "/earthquakes-map-visualizer/static/css/main.13323a26.chunk.css.map",
-    "static/js/2.40debefe.chunk.js.LICENSE.txt": "/earthquakes-map-visualizer/static/js/2.40debefe.chunk.js.LICENSE.txt"
+    "static/css/main.1c66e721.chunk.css.map": "/earthquakes-map-visualizer/static/css/main.1c66e721.chunk.css.map",
+    "static/js/2.3256b4fb.chunk.js.LICENSE.txt": "/earthquakes-map-visualizer/static/js/2.3256b4fb.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.6a0d16e9.js",
+    "static/js/runtime-main.643b4ee8.js",
     "static/css/2.4c97ca4f.chunk.css",
-    "static/js/2.40debefe.chunk.js",
-    "static/css/main.13323a26.chunk.css",
-    "static/js/main.0448ebaf.chunk.js"
+    "static/js/2.3256b4fb.chunk.js",
+    "static/css/main.1c66e721.chunk.css",
+    "static/js/main.c1f6e3b2.chunk.js"
   ]
 }
