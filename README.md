@@ -1,6 +1,6 @@
 # Earthquakes Map Visualizer App
 
-Here you can see the world earthquakes filtered by range of dates and gruped by clusters.
+Here you can see the world earthquakes filtered by range of dates and grouped by clusters.
 Try to click on a cluster to see the group of earthquakes or click on a point to see the eartkquake detail.
 
 Also try to search an earthquake using the queryparams of URL (ex. ?id=us6000dzbg).

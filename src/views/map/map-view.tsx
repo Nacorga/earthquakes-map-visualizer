@@ -2,12 +2,12 @@ import './map-view.scss';
 import MapComponent from '../../components/map/map.component';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { connect } from 'react-redux';
-import { IEarthquakesListState, IState } from '../../interfaces/state.interface';
+import { IState } from '../../interfaces/state.interface';
 
-const MapView = ({ isLoading, list }: IEarthquakesListState) => {
+const MapView = ({ earthquake, earthquakesList }: IState) => {
   return (
     <div className="map-view">
-      {isLoading ? (
+      {earthquakesList.isLoading || (earthquake.isLoading && earthquakesList.list.length === 0) ? (
         <div className="spinner-wrapper">
           <CircularProgress size={120} />
         </div>
@@ -17,15 +17,16 @@ const MapView = ({ isLoading, list }: IEarthquakesListState) => {
           loadingElement={<div style={{ height: `100%` }} />}
           containerElement={<div style={{ height: `100%` }} />}
           mapElement={<div style={{ height: `100%` }} />}
-          points={list}
+          earthquake={earthquake.detail}
+          points={earthquakesList.list}
         />
       )}
     </div>
   );
 };
 
-const mapStateToProps = (state: IState): IEarthquakesListState => {
-  return state.earthquakesList;
+const mapStateToProps = (state: IState): IState => {
+  return state;
 };
 
 export default connect(mapStateToProps)(MapView);

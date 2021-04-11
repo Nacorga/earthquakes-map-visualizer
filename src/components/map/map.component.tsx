@@ -15,6 +15,7 @@ interface IGmConfig {
 
 const MapComponent = withScriptjs(
   withGoogleMap((props: any) => {
+    const earthquake: IEarthquake | null = props.earthquake;
     const points: IMapPoint[] = props.points;
 
     const [map, setMap] = useState<GoogleMap>();
@@ -23,8 +24,7 @@ const MapComponent = withScriptjs(
     const [gmDefaultConfig, setGmDefaultConfig] = useState<IGmConfig>();
 
     useEffect(() => {
-      if (store.getState().earthquake.detail) {
-        const earthquake = store.getState().earthquake.detail as IEarthquake;
+      if (earthquake) {
         const lng = earthquake.geometry.coordinates[0];
         const lat = earthquake.geometry.coordinates[1];
         setQueryPoint({
@@ -70,8 +70,8 @@ const MapComponent = withScriptjs(
 
     const getEarthquakeDetails = async (id: string) => {
       store.dispatch(earthquakeLoaderToggle(true));
-      const earthquake = await findEarthquake(id);
-      store.dispatch(setEarthquake(earthquake));
+      const res = await findEarthquake(id);
+      store.dispatch(setEarthquake(res));
       store.dispatch(earthquakeLoaderToggle(false));
     };
 
